@@ -1,9 +1,5 @@
 /*
- * $Id: dlg_tophiding.h $
- *
- * dialog module - basic support for dialog tracking
- *
- * Copyright (C) 2011 Free Software Fundation
+ * Copyright (C) 2014-2015 Robison Tesini & Evandro Villaron
  *
  * This file is part of opensips, a free SIP server.
  *
@@ -23,23 +19,8 @@
  *
  * History:
  * --------
- *  2011-05-02  initial version (Anca Vamanu)
+ *  2014-10-14 initial version (Villaron/Tesini)
  */
 
-#ifndef _DIALOG_DLG_TH_H_
-#define _DIALOG_DLG_TH_H_
 
-#include "dlg_hash.h"
-
-int w_topology_hiding(struct sip_msg *req);
-int w_topology_hiding1(struct sip_msg *req,char *param);
-int dlg_th_onroute(struct dlg_cell *dlg, struct sip_msg *req, int dir);
-int dlg_th_onreply(struct dlg_cell *dlg, struct sip_msg *rpl,
-		struct sip_msg *req,int init_req, int dir);
-
-int dlg_th_pre_raw(str *data, struct sip_msg* foo);
-int dlg_th_post_raw(str *data, struct sip_msg* foo);
-int dlg_parse_passed_ct_params(str *params);
-int dlg_parse_passed_hdr_ct_params(str *params);
-
-#endif
+int post(char*  url, char* xml,char** response);

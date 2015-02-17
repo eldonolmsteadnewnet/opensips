@@ -320,6 +320,7 @@ else
   ifneq ($(VERSIONTYPE),)
     THISREVISION = $(shell cat .gitrevision)
   endif
+  OLDREVISION = "$(THISREVISION)"
 endif
 
 ifneq ($(THISREVISION),)
@@ -1422,6 +1423,12 @@ ifeq ($(YACC),)
 	YACC=$(DEFAULT_YACC)
 endif
 YACC_FLAGS=-d -b cfg
+
+ifdef DEBUG_PARSER
+	CFLAGS+=-DYYDEBUG -DDEBUG_PARSER
+	YACC_FLAGS+=-t
+endif
+
 
 LDFLAGS+= $(LD_EXTRA_OPTS)
 

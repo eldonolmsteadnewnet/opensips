@@ -298,8 +298,7 @@ int dlg_replicated_update(void)
 	dlg_lock(d_table, d_entry);
 
 	if (!dlg) {
-		/* TODO: change to LM_DBG */
-		LM_ERR("dialog not found, building new\n");
+		LM_DBG("dialog not found, building new\n");
 
 		dlg = build_new_dlg(&call_id, &from_uri, &to_uri, &from_tag);
 		if (!dlg) {
@@ -478,7 +477,9 @@ void replicate_dialog_created(struct dlg_cell *dlg)
 
 	/* XXX: on shutdown only? */
 	vars = write_dialog_vars(dlg->vals);
+	dlg_lock_dlg(dlg);
 	profiles = write_dialog_profiles(dlg->profile_links);
+	dlg_unlock_dlg(dlg);
 
 	bin_push_str(vars);
 	bin_push_str(profiles);
@@ -543,7 +544,9 @@ void replicate_dialog_updated(struct dlg_cell *dlg)
 
 	/* XXX: on shutdown only? */
 	vars = write_dialog_vars(dlg->vals);
+	dlg_lock_dlg(dlg);
 	profiles = write_dialog_profiles(dlg->profile_links);
+	dlg_unlock_dlg(dlg);
 
 	bin_push_str(vars);
 	bin_push_str(profiles);

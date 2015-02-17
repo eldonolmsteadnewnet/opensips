@@ -358,6 +358,9 @@ char **my_argv;
 
 extern FILE* yyin;
 extern int yyparse();
+#ifdef DEBUG_PARSER
+extern int yydebug;
+#endif
 
 
 int is_main = 1; /* flag = is this the  "main" process? */
@@ -613,6 +616,9 @@ void handle_sigs(void)
  */
 static void sig_usr(int signo)
 {
+	int status;
+	pid_t pid;
+
 	if (is_main){
 		if (sig_flag==0) sig_flag=signo;
 		else /*  previous sig. not processed yet, ignoring? */
@@ -653,8 +659,9 @@ static void sig_usr(int signo)
 					/* ignored*/
 					break;
 			case SIGCHLD:
-					LM_DBG("SIGCHLD received: "
-						"we do not worry about grand-children\n");
+					pid = waitpid(-1, &status, WNOHANG);
+					LM_DBG("SIGCHLD received from %ld (status=%d), ignoring\n",
+						(long)pid,status);
 		}
 	}
 }
@@ -1361,6 +1368,10 @@ try_again:
 		goto error;
 	}
 
+	/* used for parser debugging */
+#ifdef DEBUG_PARSER
+	yydebug = 1;
+#endif
 
 	/* parse the config file, prior to this only default values
 	   e.g. for debugging settings will be used */
